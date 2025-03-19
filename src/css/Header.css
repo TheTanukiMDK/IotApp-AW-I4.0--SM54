@@ -1,0 +1,37 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem; /* p-4 */
+    border-bottom: 1px solid #ebebeb; /* border-yellow-500 */
+    margin-left: 15%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space-x-2 */
+}
+
+.header-icon {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: bold;
+}
+
+.header-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+}
+
+.header-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F59E0B; /* bg-yellow-500 */
+    color: black; /* text-black */
+    font-weight: bold;
+    width: 2.5rem; /* w-10 */
+    height: 2.5rem; /* h-10 */
+    border-radius: 50%; /* rounded-full */
+}
