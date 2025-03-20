@@ -29,6 +29,7 @@ interface Parcela {
 function Dashboard() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
+    const markerRef = useRef<mapboxgl.Marker | null>(null);
 
     const [parcelas, setParcelas] = useState<Parcela[]>([]);
     const [parcelaSeleccionada, setParcelaSeleccionada] = useState<Parcela | null>(null);
@@ -62,6 +63,27 @@ function Dashboard() {
             })
             .catch((error) => console.error('Error al obtener los datos:', error));
     }, []);
+
+    useEffect(() => {
+        if (mapRef.current && parcelaSeleccionada) {
+            const { latitud, longitud } = parcelaSeleccionada;
+
+            // Mover el mapa a la ubicación de la parcela seleccionada
+            mapRef.current.flyTo({
+                center: [longitud, latitud],
+                zoom: 12,
+            });
+
+            // Agregar o actualizar el marcador
+            if (markerRef.current) {
+                markerRef.current.setLngLat([longitud, latitud]);
+            } else {
+                markerRef.current = new mapboxgl.Marker()
+                    .setLngLat([longitud, latitud])
+                    .addTo(mapRef.current);
+            }
+        }
+    }, [parcelaSeleccionada]);
 
     const handleParcelaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const parcelaId = parseInt(event.target.value, 10);
