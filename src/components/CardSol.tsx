@@ -1,13 +1,17 @@
-import React from 'react'
-import '../css/Cards.css'
+import React from 'react';
+import '../css/Cards.css';
 
-function CardSol() {
-  return (
-    <div className="card">
-    <h2 className="card-title">Sol</h2>
-    <p className="card-description">200</p>
-  </div>
-  )
+interface CardSolProps {
+  sol: number;
 }
 
-export default CardSol
+function CardSol({ sol }: CardSolProps) {
+  return (
+    <div className="card">
+      <h2 className="card-title">Sol</h2>
+      <p className="card-description">{sol} %</p>
+    </div>
+  );
+}
+
+export default CardSol;

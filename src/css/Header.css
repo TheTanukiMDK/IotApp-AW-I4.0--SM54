@@ -3,15 +3,18 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem; /* p-4 */
-    border-bottom: 1px solid #ebebeb; /* border-yellow-500 */
-    margin-left: 15%;
+    border-bottom: 1px ; /* border-yellow-500 */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 0; /* Asegura que el header esté por encima del sidebar */
+
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: 0.5rem; /* space-x-2 */
+    margin-left: 250px; /* Ajusta este valor al ancho del sidebar */
 }
 
 .header-icon {

@@ -1,13 +1,17 @@
-import React from 'react'
-import '../css/Cards.css'
+import React from 'react';
+import '../css/Cards.css';
 
-function Cardlluvia() {
-  return (
-    <div className="card">
-      <h2 className="card-title">Luvia</h2>
-      <p className="card-description">200</p>
-    </div>
-  )
+interface CardlluviaProps {
+  lluvia: number;
 }
 
-export default Cardlluvia
+function Cardlluvia({ lluvia }: CardlluviaProps) {
+  return (
+    <div className="card">
+      <h2 className="card-title">Lluvia</h2>
+      <p className="card-description">{lluvia} mm</p>
+    </div>
+  );
+}
+
+export default Cardlluvia;
