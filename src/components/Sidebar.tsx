@@ -14,8 +14,8 @@ function Sidebar() {
 
                 <nav>
                     <ul>
-                        <li> <a className="button" href="/Dashboard"> <ChartArea /> Dashboard</a></li>
-                        <li> <a className="Cerrar-Sesion">  <Trash2 /> Parcelas Borradas</a></li>
+                        <li> <a className="button" href="/"> <ChartArea /> Dashboard</a></li>
+                        <li> <a className="Cerrar-Sesion" href='/parcelasDelete'>  <Trash2 /> Parcelas Borradas</a></li>
                         <li> <a className="Cerrar-Sesion"> <LogOut /> Salir</a></li>
                     </ul>
                 </nav>
