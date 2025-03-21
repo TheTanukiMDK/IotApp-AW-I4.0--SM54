@@ -7,6 +7,7 @@ import CardTemp from '../components/CardTemp';
 import Cardlluvia from '../components/Cardlluvia';
 import CardSol from '../components/CardSol';
 import mapboxgl from 'mapbox-gl';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../css/MapBox.css';
@@ -91,6 +92,14 @@ function Dashboard() {
         setParcelaSeleccionada(parcela);
     };
 
+    const navigate = useNavigate();
+
+    const handleVerGraficos = () => {
+        if (parcelaSeleccionada) {
+            navigate(`/graficos/${parcelaSeleccionada.id}`); // Redirige a la página de gráficos con el ID de la parcela
+        }
+    };
+
     return (
         <>
             <div className="dashboard">
@@ -134,7 +143,9 @@ function Dashboard() {
                                     <p>Nombre: {parcelaSeleccionada.nombre}</p>
                                     <p>Responsable: {parcelaSeleccionada.responsable}</p>
                                     <p>Tipo de cultivo: {parcelaSeleccionada.tipo_cultivo}</p>
-                                    <button className='graf-btn'>Ver Graficos</button>
+                                    <button className="graf-btn" onClick={handleVerGraficos}>
+                                        Ver Graficos
+                                    </button>
                                 </div>
                             </div>
                         )}

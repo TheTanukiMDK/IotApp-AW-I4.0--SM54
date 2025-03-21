@@ -22,7 +22,7 @@ const Prueba = () => {
         const syncAndFetchParcelas = async () => {
             try {
                 // Primero sincroniza los datos
-                await fetch('http://localhost:8080/sync', { method: 'POST' });
+                //await fetch('http://localhost:8080/sync', { method: 'POST' });
 
                 // Luego obtiene los datos actualizados
                 const response = await fetch('http://localhost:8080/parcelas');
