@@ -1,0 +1,49 @@
+.parcelasdelete {
+    display: flex;
+    flex-direction: column;
+}
+
+.contenido1 {
+    margin-left: 15%;
+}
+
+.table-div {
+    padding: 20px;
+}
+
+.table-structure {
+    border-collapse: collapse;
+    font-family: sans-serif;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.20);
+    width: 100%;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+}
+
+
+.table-structure th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #0f325a;
+    color: white;
+}
+
+tr:nth-child(odd) {
+    background-color: #e6f3ffab;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.icons-pointer {
+    cursor: pointer;
+}
+
+.actions {
+    margin-right: 15px;
+}

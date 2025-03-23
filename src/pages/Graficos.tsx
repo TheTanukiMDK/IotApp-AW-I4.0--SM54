@@ -49,10 +49,10 @@ function Graficos() {
     useEffect(() => {
         const syncAndFetchData = async () => {
             try {
-                /* const syncResponse = await fetch('http://localhost:8080/sync', { method: 'GET' });
+                const syncResponse = await fetch('http://localhost:8080/sync', { method: 'GET' });
                     if (!syncResponse.ok) {
                         throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
-                    }*/
+                    }
 
                 if (id_parcela) {
                     const todosResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/todos`);
