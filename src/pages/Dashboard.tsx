@@ -7,10 +7,17 @@ import CardTemp from '../components/CardTemp';
 import Cardlluvia from '../components/Cardlluvia';
 import CardSol from '../components/CardSol';
 import mapboxgl from 'mapbox-gl';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useNavigate } from 'react-router-dom';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../css/MapBox.css';
+
+interface Sensores {
+    temperatura: number;
+    humedad: number;
+    lluvia: number;
+    sol: number;
+}
 
 interface Parcela {
     id: number;
@@ -34,6 +41,7 @@ function Dashboard() {
 
     const [parcelas, setParcelas] = useState<Parcela[]>([]);
     const [parcelaSeleccionada, setParcelaSeleccionada] = useState<Parcela | null>(null);
+    const [sensores, setSensores] = useState<Sensores | null>(null); // Estado para los datos de sensores
 
     useEffect(() => {
         mapboxgl.accessToken = 'pk.eyJ1IjoiYWRpYXZhbmlhIiwiYSI6ImNtODdkNTM3azBlNTUyanBzeDI4ZWk0MjcifQ.eTmoY78COUVLrNAZWdyPKA';
@@ -55,12 +63,13 @@ function Dashboard() {
     }, []);
 
     useEffect(() => {
-        // Consumir la API
-        fetch('https://moriahmkt.com/iotapp/')
+        // Consumir la API para obtener parcelas y sensores
+        fetch('https://moriahmkt.com/iotapp/test/')
             .then((response) => response.json())
             .then((data) => {
                 setParcelas(data.parcelas); // Asume que la API devuelve un array de parcelas
                 setParcelaSeleccionada(data.parcelas[0]); // Seleccionar la primera parcela por defecto
+                setSensores(data.sensores); // Asume que la API devuelve un objeto con los datos de sensores
             })
             .catch((error) => console.error('Error al obtener los datos:', error));
     }, []);
@@ -112,15 +121,15 @@ function Dashboard() {
                                 <div ref={mapContainerRef} className="map-container" />
                             </div>
                             <div className="cards">
-                                {parcelaSeleccionada ? (
+                                {sensores ? (
                                     <>
-                                        <CardTemp temperatura={parcelaSeleccionada.sensor.temperatura} />
-                                        <CardHum humedad={parcelaSeleccionada.sensor.humedad} />
-                                        <Cardlluvia lluvia={parcelaSeleccionada.sensor.lluvia} />
-                                        <CardSol sol={parcelaSeleccionada.sensor.sol} />
+                                        <CardTemp temperatura={sensores.temperatura} />
+                                        <CardHum humedad={sensores.humedad} />
+                                        <Cardlluvia lluvia={sensores.lluvia} />
+                                        <CardSol sol={sensores.sol} />
                                     </>
                                 ) : (
-                                    <p>Seleccione una parcela para ver los datos.</p>
+                                    <p>Cargando datos de sensores...</p>
                                 )}
                             </div>
                         </section>

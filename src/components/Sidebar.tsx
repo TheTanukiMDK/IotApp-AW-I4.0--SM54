@@ -7,9 +7,7 @@ function Sidebar() {
         <>
             <aside className="sidebar">
                 <div className='container'>
-                    <CircleUserRound className='icon' size="4rem" />
-                    
-                    <h2>Usuario</h2>
+                    <h1>IotApp</h1>
                 </div>
 
                 <nav>

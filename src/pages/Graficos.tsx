@@ -67,7 +67,7 @@ function Graficos() {
                         throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
                     }
                     const porHoraData: SensorData[] = await porHoraResponse.json();
-                    setDataPorHora(porHoraData); // Todos los datos
+                    setDataPorHora(porHoraData.slice(0,10)); // Todos los datos con limite de 10
 
                     const porDiaResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-dia`);
                     if (!porDiaResponse.ok) {
@@ -160,7 +160,7 @@ function Graficos() {
             <Sidebar></Sidebar>
             <div className='contenido'>
                 <h1 style={{ textAlign: 'center' }}>Gráficos de la Parcela {id_parcela}</h1>
-                {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+                {error && <p style={{ color: 'red' }}></p>}
 
                 <div className="card-graficos">
                     <h2>Último Dato (Todos)</h2>
