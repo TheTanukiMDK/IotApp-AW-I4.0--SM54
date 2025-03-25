@@ -1,17 +1,17 @@
-import React from 'react';
-import '../css/Cards.css';
+import "../css/Cards.css"
 
 interface CardTempProps {
-  temperatura: number;
+  temperatura: number
 }
 
 function CardTemp({ temperatura }: CardTempProps) {
   return (
-    <div className="card">
+    <div className="card temperature">
       <h2 className="card-title">Temperatura</h2>
       <p className="card-description">{temperatura} °C</p>
     </div>
-  );
+  )
 }
 
-export default CardTemp;
+export default CardTemp
+

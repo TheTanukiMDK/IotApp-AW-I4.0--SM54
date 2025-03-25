@@ -1,17 +1,17 @@
-import React from 'react';
-import '../css/Cards.css';
+import "../css/Cards.css"
 
 interface CardHumProps {
-  humedad: number;
+  humedad: number
 }
 
 function CardHum({ humedad }: CardHumProps) {
   return (
-    <div className="card">
+    <div className="card humidity">
       <h2 className="card-title">Humedad</h2>
       <p className="card-description">{humedad} %</p>
     </div>
-  );
+  )
 }
 
-export default CardHum;
+export default CardHum
+
