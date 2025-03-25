@@ -44,6 +44,7 @@ function Graficos() {
     const [dataTodos, setDataTodos] = useState<SensorData | null>(null);
     const [dataPorHora, setDataPorHora] = useState<SensorData[]>([]);
     const [dataPorDia, setDataPorDia] = useState<SensorData[]>([]);
+    const [nombreParcela, setNombreParcela] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -55,6 +56,14 @@ function Graficos() {
                     }
 
                 if (id_parcela) {
+                     // Obtener el nombre de la parcela
+                     const parcelaResponse = await fetch(`http://localhost:8080/parcelas/${id_parcela}`);
+                     if (!parcelaResponse.ok) {
+                         throw new Error(`Error ${parcelaResponse.status}: No se pudo obtener el nombre de la parcela.`);
+                     }
+                     const parcelaData = await parcelaResponse.json();
+                     setNombreParcela(parcelaData.nombre);
+
                     const todosResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/todos`);
                     if (!todosResponse.ok) {
                         throw new Error(`Error ${todosResponse.status}: No se pudieron obtener los datos "todos".`);
@@ -159,11 +168,11 @@ function Graficos() {
             <HeaderGrafic></HeaderGrafic>
             <Sidebar></Sidebar>
             <div className='contenido'>
-                <h1 style={{ textAlign: 'center' }}>Gráficos de la Parcela {id_parcela}</h1>
+                <h1 style={{ textAlign: 'center' }}>{nombreParcela}</h1>
                 {error && <p style={{ color: 'red' }}></p>}
 
                 <div className="card-graficos">
-                    <h2>Último Dato (Todos)</h2>
+                    <h2>Datos Generales</h2>
                     {pieData ? (
                         <div className="chart-container" style={{ width: '300px', height: '300px' }}>
                             <Pie data={pieData} />
