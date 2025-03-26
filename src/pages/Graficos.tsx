@@ -169,6 +169,7 @@ function Graficos() {
             <Sidebar></Sidebar>
             <div className='contenido'>
                 <h1 style={{ textAlign: 'center' }}>{nombreParcela}</h1>
+                <h2 style={{ textAlign: 'center' }}>Datos Historicos de Sensores</h2>
                 {error && <p style={{ color: 'red' }}></p>}
 
                 <div className="card-graficos">

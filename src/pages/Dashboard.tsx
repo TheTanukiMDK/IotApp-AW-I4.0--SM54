@@ -153,7 +153,7 @@ function Dashboard() {
                                     <p>Responsable: {parcelaSeleccionada.responsable}</p>
                                     <p>Tipo de cultivo: {parcelaSeleccionada.tipo_cultivo}</p>
                                     <button className="graf-btn" onClick={handleVerGraficos}>
-                                        Ver Graficos
+                                        Ver Historico
                                     </button>
                                 </div>
                             </div>
