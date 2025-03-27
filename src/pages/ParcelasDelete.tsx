@@ -38,21 +38,25 @@ function ParcelasDelete() {
         if (!syncResponse.ok) {
           throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`)
         }
-
+  
         // Consumir la API de parcelas borradas
         const response = await fetch('http://localhost:8080/parcelas-borradas')
         if (!response.ok) {
           throw new Error('Error al obtener los datos')
         }
         const data: Parcela[] = await response.json()
-        setParcelas(data)
+  
+        // Filtrar datos duplicados basados en el ID
+        const uniqueData = Array.from(new Map(data.map(parcela => [parcela.id, parcela])).values())
+  
+        setParcelas(uniqueData)
         setLoading(false)
       } catch (err: any) {
         setError(err.message)
         setLoading(false)
       }
     }
-
+  
     fetchData()
   }, [])
 

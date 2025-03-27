@@ -53,18 +53,18 @@ function Graficos() {
         const syncAndFetchData = async () => {
             try {
                 const syncResponse = await fetch('http://localhost:8080/sync', { method: 'GET' });
-                    if (!syncResponse.ok) {
-                        throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
-                    }
+                if (!syncResponse.ok) {
+                    throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
+                }
 
                 if (id_parcela) {
-                     // Obtener el nombre de la parcela
-                     const parcelaResponse = await fetch(`http://localhost:8080/parcelas/${id_parcela}`);
-                     if (!parcelaResponse.ok) {
-                         throw new Error(`Error ${parcelaResponse.status}: No se pudo obtener el nombre de la parcela.`);
-                     }
-                     const parcelaData = await parcelaResponse.json();
-                     setNombreParcela(parcelaData.nombre);
+                    // Obtener el nombre de la parcela
+                    const parcelaResponse = await fetch(`http://localhost:8080/parcelas/${id_parcela}`);
+                    if (!parcelaResponse.ok) {
+                        throw new Error(`Error ${parcelaResponse.status}: No se pudo obtener el nombre de la parcela.`);
+                    }
+                    const parcelaData = await parcelaResponse.json();
+                    setNombreParcela(parcelaData.nombre);
 
                     const todosResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/todos`);
                     if (!todosResponse.ok) {
@@ -78,7 +78,7 @@ function Graficos() {
                         throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
                     }
                     const porHoraData: SensorData[] = await porHoraResponse.json();
-                    setDataPorHora(porHoraData.slice(0,10)); // Todos los datos con limite de 10
+                    setDataPorHora(porHoraData.slice(0, 10)); // Todos los datos con limite de 10
 
                     const porDiaResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-dia`);
                     if (!porDiaResponse.ok) {
@@ -94,27 +94,27 @@ function Graficos() {
         };
 
         syncAndFetchData();
-        const interval = setInterval(syncAndFetchData, 10000);
+        const interval = setInterval(syncAndFetchData, 100000);
         return () => clearInterval(interval);
     }, [id_parcela]);
     const radarData = dataTodos
-    ? {
-        labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
-        datasets: [
-            {
-                label: 'Datos de sensores',
-                data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fondo entre las líneas
-                borderColor: 'rgba(54, 162, 235, 1)', // Color de las líneas
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color de los puntos
-                pointBorderColor: '#fff', // Borde de los puntos
-                pointHoverBackgroundColor: '#fff', // Fondo de los puntos al pasar el mouse
-                pointHoverBorderColor: 'rgba(54, 162, 235, 1)', // Borde de los puntos al pasar el mouse
-                fill: true, // Habilitar el fondo entre las líneas
-            },
-        ],
-    }
-    : null;
+        ? {
+            labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
+            datasets: [
+                {
+                    label: 'Datos de sensores',
+                    data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fondo entre las líneas
+                    borderColor: 'rgba(54, 162, 235, 1)', // Color de las líneas
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color de los puntos
+                    pointBorderColor: '#fff', // Borde de los puntos
+                    pointHoverBackgroundColor: '#fff', // Fondo de los puntos al pasar el mouse
+                    pointHoverBorderColor: 'rgba(54, 162, 235, 1)', // Borde de los puntos al pasar el mouse
+                    fill: true, // Habilitar el fondo entre las líneas
+                },
+            ],
+        }
+        : null;
     const radarOptions = {
         responsive: true,
         maintainAspectRatio: false, // Evita problemas de redimensionamiento
