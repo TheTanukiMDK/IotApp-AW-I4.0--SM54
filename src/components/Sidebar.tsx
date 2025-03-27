@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, Trash2 } from "lucide-react"
+import { LayoutDashboard, LogOut, Trash2, ChartNoAxesCombined } from "lucide-react"
 import "../css/Sidebar.css"
 
 function Sidebar() {
@@ -16,6 +16,13 @@ function Sidebar() {
               <a className="button" href="/">
                 {" "}
                 <LayoutDashboard /> Dashboard
+              </a>
+            </li>
+           <li>
+              {" "}
+              <a className="Cerrar-Sesion" href="/graficosGeneral">
+                {" "}
+                <ChartNoAxesCombined /> Graficos
               </a>
             </li>
             <li>

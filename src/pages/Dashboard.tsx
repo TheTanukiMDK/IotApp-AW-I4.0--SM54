@@ -74,32 +74,51 @@ function Dashboard() {
             .catch((error) => console.error('Error al obtener los datos:', error));
     }, []);
 
+    const markersRef = useRef<mapboxgl.Marker[]>([]); // Array para almacenar los marcadores
+
     useEffect(() => {
-        if (mapRef.current && parcelaSeleccionada) {
-            const { latitud, longitud } = parcelaSeleccionada;
-
-            // Mover el mapa a la ubicación de la parcela seleccionada
-            mapRef.current.flyTo({
-                center: [longitud, latitud],
-                zoom: 12,
-            });
-
-            // Agregar o actualizar el marcador
-            if (markerRef.current) {
-                markerRef.current.setLngLat([longitud, latitud]);
-            } else {
-                markerRef.current = new mapboxgl.Marker()
+        if (mapRef.current && parcelas.length > 0) {
+            // Limpiar marcadores existentes
+            markersRef.current.forEach((marker) => marker.remove());
+            markersRef.current = []; // Vaciar el array de marcadores
+    
+            // Crear un array de coordenadas [longitud, latitud] para todas las parcelas
+            const bounds = new mapboxgl.LngLatBounds();
+    
+            parcelas.forEach((parcela) => {
+                const { latitud, longitud, nombre, responsable, tipo_cultivo } = parcela;
+    
+                // Agregar cada coordenada al límite del mapa
+                bounds.extend([longitud, latitud]);
+    
+                // Crear un popup con la información de la parcela
+                const popup = new mapboxgl.Popup({ offset: 25 }) // Offset para que no cubra el marcador
+                    .setHTML(`
+                        <div style="font-size: 12px; line-height: 1.4;">
+                            <strong>${nombre}</strong><br />
+                            Responsable: ${responsable}<br />
+                            Cultivo: ${tipo_cultivo}
+                        </div>
+                    `);
+    
+                const marker = new mapboxgl.Marker()
                     .setLngLat([longitud, latitud])
-                    .addTo(mapRef.current);
-            }
+                    .setPopup(popup) // Asociar el popup al marcador
+                    .addTo(mapRef.current!);
+    
+                // Guardar el marcador en el array
+                markersRef.current.push(marker);
+    
+                // Asociar evento de clic para mostrar información de la parcela
+                marker.getElement().addEventListener('click', () => {
+                    setParcelaSeleccionada(parcela);
+                });
+            });
+    
+            // Ajustar el mapa para que muestre todas las parcelas
+            mapRef.current.fitBounds(bounds, { padding: 50 });
         }
-    }, [parcelaSeleccionada]);
-
-    const handleParcelaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const parcelaId = parseInt(event.target.value, 10);
-        const parcela = parcelas.find((p) => p.id === parcelaId) || null;
-        setParcelaSeleccionada(parcela);
-    };
+    }, [parcelas, mapRef.current]);
 
     const navigate = useNavigate();
 
@@ -136,14 +155,7 @@ function Dashboard() {
                     </div>
                     <section className="select-and-parcel">
                         <div className="select-info">
-                            <select className="select" onChange={handleParcelaChange}>
-                                <option value="">Seleccione un cultivo</option>
-                                {parcelas.map((parcela) => (
-                                    <option key={parcela.id} value={parcela.id}>
-                                        {parcela.nombre}
-                                    </option>
-                                ))}
-                            </select>
+                            
                         </div>
                         {parcelaSeleccionada && (
                             <div className="parcel-info">

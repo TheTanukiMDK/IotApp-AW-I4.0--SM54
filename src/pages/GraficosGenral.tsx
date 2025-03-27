@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Radar, Line, Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -32,6 +31,7 @@ ChartJS.register(
     RadialLinearScale,
     Filler
 );
+
 interface SensorData {
     fecha: string;
     hora: string;
@@ -42,114 +42,103 @@ interface SensorData {
 }
 
 function Graficos() {
-    const { id_parcela } = useParams<{ id_parcela: string }>();
     const [dataTodos, setDataTodos] = useState<SensorData | null>(null);
     const [dataPorHora, setDataPorHora] = useState<SensorData[]>([]);
     const [dataPorDia, setDataPorDia] = useState<SensorData[]>([]);
-    const [nombreParcela, setNombreParcela] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const syncAndFetchData = async () => {
+        const fetchData = async () => {
             try {
                 const syncResponse = await fetch('http://localhost:8080/sync', { method: 'GET' });
-                    if (!syncResponse.ok) {
-                        throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
-                    }
-
-                if (id_parcela) {
-                     // Obtener el nombre de la parcela
-                     const parcelaResponse = await fetch(`http://localhost:8080/parcelas/${id_parcela}`);
-                     if (!parcelaResponse.ok) {
-                         throw new Error(`Error ${parcelaResponse.status}: No se pudo obtener el nombre de la parcela.`);
-                     }
-                     const parcelaData = await parcelaResponse.json();
-                     setNombreParcela(parcelaData.nombre);
-
-                    const todosResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/todos`);
-                    if (!todosResponse.ok) {
-                        throw new Error(`Error ${todosResponse.status}: No se pudieron obtener los datos "todos".`);
-                    }
-                    const todosData: SensorData[] = await todosResponse.json();
-                    setDataTodos(todosData[todosData.length - 1]); // Solo el último dato
-
-                    const porHoraResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-hora`);
-                    if (!porHoraResponse.ok) {
-                        throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
-                    }
-                    const porHoraData: SensorData[] = await porHoraResponse.json();
-                    setDataPorHora(porHoraData.slice(0,10)); // Todos los datos con limite de 10
-
-                    const porDiaResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-dia`);
-                    if (!porDiaResponse.ok) {
-                        throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
-                    }
-                    const porDiaData: SensorData[] = await porDiaResponse.json();
-                    setDataPorDia(porDiaData.slice(-7)); // Últimos 7 días
+                if (!syncResponse.ok) {
+                    throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
                 }
+                const todosResponse = await fetch('http://localhost:8080/sensores-generales');
+                if (!todosResponse.ok) {
+                    throw new Error(`Error ${todosResponse.status}: No se pudieron obtener los datos "todos".`);
+                }
+                const todosData: SensorData[] = await todosResponse.json();
+                setDataTodos(todosData[todosData.length - 1]); // Solo el último dato
+
+                const porHoraResponse = await fetch('http://localhost:8080/sensores-generales/por-hora');
+                if (!porHoraResponse.ok) {
+                    throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
+                }
+                const porHoraData: SensorData[] = await porHoraResponse.json();
+                setDataPorHora(porHoraData.slice(0, 10)); // Todos los datos con límite de 10
+
+                const porDiaResponse = await fetch('http://localhost:8080/sensores-generales/por-dia');
+                if (!porDiaResponse.ok) {
+                    throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
+                }
+                const porDiaData: SensorData[] = await porDiaResponse.json();
+                setDataPorDia(porDiaData.slice(-7)); // Últimos 7 días
             } catch (error: any) {
-                console.error('Error al sincronizar o obtener los datos:', error);
+                console.error('Error al obtener los datos:', error);
                 setError(error.message);
             }
         };
 
-        syncAndFetchData();
-        const interval = setInterval(syncAndFetchData, 10000);
+        fetchData();
+        const interval = setInterval(fetchData, 10000);
         return () => clearInterval(interval);
-    }, [id_parcela]);
+    }, []);
+
     const radarData = dataTodos
-    ? {
-        labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
-        datasets: [
-            {
-                label: 'Datos de sensores',
-                data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fondo entre las líneas
-                borderColor: 'rgba(54, 162, 235, 1)', // Color de las líneas
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color de los puntos
-                pointBorderColor: '#fff', // Borde de los puntos
-                pointHoverBackgroundColor: '#fff', // Fondo de los puntos al pasar el mouse
-                pointHoverBorderColor: 'rgba(54, 162, 235, 1)', // Borde de los puntos al pasar el mouse
-                fill: true, // Habilitar el fondo entre las líneas
-            },
-        ],
-    }
-    : null;
+        ? {
+              labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
+              datasets: [
+                  {
+                      label: 'Datos de sensores',
+                      data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
+                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                      pointBorderColor: '#fff',
+                      pointHoverBackgroundColor: '#fff',
+                      pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+                      fill: true,
+                  },
+              ],
+          }
+        : null;
+
     const radarOptions = {
         responsive: true,
-        maintainAspectRatio: false, // Evita problemas de redimensionamiento
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: true,
-                position: 'top' as const, // Posición de la leyenda
+                position: 'top' as const,
                 labels: {
                     font: {
-                        size: 14, // Tamaño de la fuente de la leyenda
+                        size: 14,
                     },
-                    color: '#333', // Color del texto de la leyenda
+                    color: '#333',
                 },
             },
         },
         scales: {
             r: {
                 angleLines: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Color de las líneas angulares
+                    color: 'rgba(0, 0, 0, 0.1)',
                 },
                 grid: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Color de las líneas del grid
+                    color: 'rgba(0, 0, 0, 0.1)',
                 },
                 ticks: {
-                    display: true, // Mostrar los números en el radar
-                    color: '#666', // Color de los números
+                    display: true,
+                    color: '#666',
                     font: {
-                        size: 1, // Tamaño de la fuente de los números
+                        size: 1,
                     },
                 },
                 pointLabels: {
                     font: {
-                        size: 14, // Tamaño de la fuente de las etiquetas
+                        size: 14,
                     },
-                    color: '#444', // Color de las etiquetas
+                    color: '#444',
                 },
             },
         },
@@ -216,8 +205,8 @@ function Graficos() {
             <HeaderGrafic></HeaderGrafic>
             <Sidebar></Sidebar>
             <div className="contenido">
-                <h1 style={{ textAlign: 'center' }}>{nombreParcela}</h1>
-                <h2 style={{ textAlign: 'center' }}>Datos Historicos de Sensores</h2>
+                <h1 style={{ textAlign: 'center' }}>Datos Generales</h1>
+                <h2 style={{ textAlign: 'center' }}>Datos Históricos de Sensores</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className="card-graficos">
@@ -253,7 +242,6 @@ function Graficos() {
                     )}
                 </div>
             </div>
-
         </div>
     );
 }
