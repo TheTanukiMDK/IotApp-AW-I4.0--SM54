@@ -8,8 +8,8 @@ interface CardlluviaProps {
 function Cardlluvia({ lluvia }: CardlluviaProps) {
   return (
     <div className="card rain">
-      <h2 className="card-title">Lluvia</h2>
-      <CloudRain size="2rem" />
+      <h2 className="card-title">Tarjeta Lluvia</h2>
+      <CloudRain size="1rem" />
       <p className="card-description">{lluvia} mm</p>
     </div>
   )

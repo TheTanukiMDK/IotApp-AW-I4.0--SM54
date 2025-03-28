@@ -7,8 +7,8 @@ interface CardHumProps {
 function CardHum({ humedad }: CardHumProps) {
   return (
     <div className="card humidity">
-      <h2 className="card-title">Humedad</h2>
-      <Droplets size="2rem" />
+      <h2 className="card-title">Tarjeta Humedad </h2>
+      <Droplets size="1rem" />
       <p className="card-description">{humedad} %</p>
     </div>
   )

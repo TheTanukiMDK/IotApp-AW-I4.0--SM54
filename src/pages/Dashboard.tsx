@@ -64,7 +64,7 @@ function Dashboard() {
 
     useEffect(() => {
         // Consumir la API para obtener parcelas y sensores
-        fetch('https://moriahmkt.com/iotapp/test/')
+        fetch('https://moriahmkt.com/iotapp/updated/')
             .then((response) => response.json())
             .then((data) => {
                 setParcelas(data.parcelas); // Asume que la API devuelve un array de parcelas
@@ -160,12 +160,12 @@ function Dashboard() {
                         {parcelaSeleccionada && (
                             <div className="parcel-info">
                                 <div className="card-parcel">
-                                    <h3>Información de la Parcela</h3>
+                                    <h3>Información de Parcela</h3>
                                     <p>Nombre: {parcelaSeleccionada.nombre}</p>
-                                    <p>Responsable: {parcelaSeleccionada.responsable}</p>
                                     <p>Tipo de cultivo: {parcelaSeleccionada.tipo_cultivo}</p>
+                                    <p>Responsable: {parcelaSeleccionada.responsable}</p>
                                     <button className="graf-btn" onClick={handleVerGraficos}>
-                                        Ver Historico
+                                        Ver Historial
                                     </button>
                                 </div>
                             </div>

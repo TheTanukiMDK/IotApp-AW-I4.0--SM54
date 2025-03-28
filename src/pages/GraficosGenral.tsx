@@ -92,12 +92,12 @@ function Graficos() {
                   {
                       label: 'Datos de sensores',
                       data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
-                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                      backgroundColor: 'rgba(211, 54, 235, 0.2)',
+                      borderColor: 'rgb(235, 54, 223)',
+                      pointBackgroundColor: 'rgb(99, 54, 235)',
                       pointBorderColor: '#fff',
                       pointHoverBackgroundColor: '#fff',
-                      pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+                      pointHoverBorderColor: 'rgb(54, 60, 235)',
                       fill: true,
                   },
               ],
@@ -206,11 +206,34 @@ function Graficos() {
             <Sidebar></Sidebar>
             <div className="contenido">
                 <h1 style={{ textAlign: 'center' }}>Datos Generales</h1>
-                <h2 style={{ textAlign: 'center' }}>Datos Históricos de Sensores</h2>
+                <h2 style={{ textAlign: 'center' }}>Bienvenido a tu historial de Sensores</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
+                
+                <div className="card-graficos">
+                    <h2>Datos de ultimos 10 Días</h2>
+                    {dataPorDia.length > 0 ? (
+                        <div className="chart-container" style={{ width: '700px', height: '400px' }}>
+                            <Bar data={barData} />
+                        </div>
+                    ) : (
+                        <p>No hay datos disponibles.</p>
+                    )}
+                </div>
 
                 <div className="card-graficos">
-                    <h2>Datos de sensores</h2>
+                    <h2>Datos Por la Hora</h2>
+                    {dataPorHora.length > 0 ? (
+                        <div className="chart-container" style={{ width: '900px', height: '600px' }}>
+                            <Line data={lineData} />
+                        </div>
+                    ) : (
+                        <p>No hay datos disponibles.</p>
+                    )}
+                </div>
+               
+
+                <div className="card-graficos">
+                    <h2>Datos Principales de sensores</h2>
                     {radarData ? (
                         <div className="chart-container" style={{ width: '400px', height: '400px' }}>
                             <Radar data={radarData} options={radarOptions} />
@@ -220,27 +243,9 @@ function Graficos() {
                     )}
                 </div>
 
-                <div className="card-graficos">
-                    <h2>Datos Por Hora</h2>
-                    {dataPorHora.length > 0 ? (
-                        <div className="chart-container" style={{ width: '900px', height: '600px' }}>
-                            <Line data={lineData} />
-                        </div>
-                    ) : (
-                        <p>No hay datos disponibles.</p>
-                    )}
-                </div>
+               
 
-                <div className="card-graficos">
-                    <h2>Últimos 7 Días</h2>
-                    {dataPorDia.length > 0 ? (
-                        <div className="chart-container" style={{ width: '700px', height: '400px' }}>
-                            <Bar data={barData} />
-                        </div>
-                    ) : (
-                        <p>No hay datos disponibles.</p>
-                    )}
-                </div>
+                
             </div>
         </div>
     );

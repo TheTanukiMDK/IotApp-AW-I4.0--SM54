@@ -6,7 +6,7 @@ function Sidebar() {
     <>
       <aside className="sidebar">
         <div className="container">
-          <h1>IotApp</h1>
+          <h1>App de Iot</h1>
         </div>
 
         <nav>
@@ -15,21 +15,21 @@ function Sidebar() {
               {" "}
               <a className="button" href="/">
                 {" "}
-                <LayoutDashboard /> Dashboard
+                <LayoutDashboard /> Dashboard Inicial
               </a>
             </li>
            <li>
               {" "}
               <a className="Cerrar-Sesion" href="/graficosGeneral">
                 {" "}
-                <ChartNoAxesCombined /> Graficos
+                <ChartNoAxesCombined /> Graficas
               </a>
             </li>
             <li>
               {" "}
               <a className="Cerrar-Sesion" href="/parcelasDelete">
                 {" "}
-                <Trash2 /> Parcelas Borradas
+                <Trash2 /> Parcela Trash
               </a>
             </li>
             <li>

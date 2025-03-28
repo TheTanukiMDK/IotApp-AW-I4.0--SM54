@@ -85,7 +85,7 @@ function Graficos() {
                         throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
                     }
                     const porDiaData: SensorData[] = await porDiaResponse.json();
-                    setDataPorDia(porDiaData.slice(0, 7)); // Últimos 7 días
+                    setDataPorDia(porDiaData.slice(0,2)); // Últimos 7 días
                 }
             } catch (error: any) {
                 console.error('Error al sincronizar o obtener los datos:', error);
@@ -221,7 +221,7 @@ function Graficos() {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className="card-graficos">
-                    <h2>Datos de sensores</h2>
+                    <h2>Grafica de sensores</h2>
                     {radarData ? (
                         <div className="chart-container" style={{ width: '400px', height: '400px' }}>
                             <Radar data={radarData} options={radarOptions} />

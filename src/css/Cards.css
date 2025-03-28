@@ -33,7 +33,7 @@
 }
 
 .card.temperature .card-description {
-  color: #ef4444;
+  color: #ef7544;
 }
 
 .card.humidity {
@@ -41,7 +41,7 @@
 }
 
 .card.humidity .card-description {
-  color: #0ea5e9;
+  color: #0d5d83;
 }
 
 .card.rain {
@@ -49,7 +49,7 @@
 }
 
 .card.rain .card-description {
-  color: #8b5cf6;
+  color: #755eaa;
 }
 
 .card.sun {

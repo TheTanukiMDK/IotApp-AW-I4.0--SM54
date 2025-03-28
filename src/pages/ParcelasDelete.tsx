@@ -78,7 +78,7 @@ function ParcelasDelete() {
             <table className='table-structure'>
               <thead>
                 <tr>
-                  <th>Nombre de <br></br> proyecto</th>
+                  <th>Nombre de <br></br> parcela</th>
                   <th>Ubicacion</th>
                   <th>Responsable</th>
                   <th>Tipo de cultivo</th>

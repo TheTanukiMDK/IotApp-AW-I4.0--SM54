@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    background-color: #f5f7fa;
+    background-color: #f7f5fa;
   }
   
   .contenido {
@@ -19,13 +19,13 @@
   
   .contenido h1 {
     margin-bottom: 2rem;
-    color: #1e293b;
+    color: #ca18a0;
     font-size: 1.875rem;
     font-weight: 700;
   }
   
   .card-graficos {
-    background-color: #ffffff;
+    background-color: #ffffff; /*hice cambi0s aqui*/
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 1.5rem;

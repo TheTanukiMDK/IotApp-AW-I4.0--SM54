@@ -8,7 +8,7 @@ interface CardSolProps {
 function CardSol({ sol }: CardSolProps) {
   return (
     <div className="card sun">
-      <h2 className="card-title">Sol</h2>
+      <h2 className="card-title">Tarjeta Sol</h2>
       <Sun size="2rem" />
       <p className="card-description">{sol} %</p>
     </div>

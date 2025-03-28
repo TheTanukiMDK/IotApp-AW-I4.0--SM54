@@ -8,8 +8,8 @@ interface CardTempProps {
 function CardTemp({ temperatura }: CardTempProps) {
   return (
     <div className="card temperature">
-      <h2 className="card-title">Temperatura</h2>
-      <ThermometerSun size="2rem" />
+      <h2 className="card-title"> Tarjeta Temperatura</h2>
+      <ThermometerSun size="1rem" />
       <p className="card-description">{temperatura} °C</p>
     </div>
   )

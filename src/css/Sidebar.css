@@ -1,7 +1,7 @@
 .sidebar {
     height: 100%;
     width: 185px;
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    background: linear-gradient(180deg, #953b8a 0%, #0f172a 100%);
     color: white;
     padding: 1.5rem 1rem;
     position: fixed;
@@ -15,7 +15,7 @@
     font-weight: 700;
     margin: 0 0 2rem 0;
     text-align: center;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    background: linear-gradient(90deg, #bbb2d7, #e2e2e5);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 0.5px;
@@ -40,7 +40,7 @@
   }
   
   .sidebar ul li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.256);
   }
   
   .sidebar ul li .button {
