@@ -85,7 +85,7 @@ function Graficos() {
                         throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
                     }
                     const porDiaData: SensorData[] = await porDiaResponse.json();
-                    setDataPorDia(porDiaData.slice(-7)); // Últimos 7 días
+                    setDataPorDia(porDiaData.slice(0, 7)); // Últimos 7 días
                 }
             } catch (error: any) {
                 console.error('Error al sincronizar o obtener los datos:', error);
