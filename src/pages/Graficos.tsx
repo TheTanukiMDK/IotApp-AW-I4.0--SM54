@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Radar, Line, Bar } from 'react-chartjs-2';
+import { Doughnut, Line, Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -17,6 +17,10 @@ import {
 } from 'chart.js';
 import Sidebar from '../components/Sidebar';
 import HeaderGrafic from '../components/HeaderGrafic';
+import CardTemp from '../components/CardTemp';
+import CardHum from '../components/CardHum';
+import Cardlluvia from '../components/Cardlluvia';
+import CardSol from '../components/CardSol';
 import '../css/Graficos.css';
 
 ChartJS.register(
@@ -32,6 +36,7 @@ ChartJS.register(
     RadialLinearScale,
     Filler
 );
+
 interface SensorData {
     fecha: string;
     hora: string;
@@ -43,7 +48,8 @@ interface SensorData {
 
 function Graficos() {
     const { id_parcela } = useParams<{ id_parcela: string }>();
-    const [dataTodos, setDataTodos] = useState<SensorData | null>(null);
+    const [isLoading, setIsLoading] = useState(true); // Nuevo estado para controlar la carga
+    const [porcentajeHumedad, setPorcentajeHumedad] = useState<number | null>(null);
     const [dataPorHora, setDataPorHora] = useState<SensorData[]>([]);
     const [dataPorDia, setDataPorDia] = useState<SensorData[]>([]);
     const [nombreParcela, setNombreParcela] = useState<string | null>(null);
@@ -66,13 +72,15 @@ function Graficos() {
                     const parcelaData = await parcelaResponse.json();
                     setNombreParcela(parcelaData.nombre);
 
-                    const todosResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/todos`);
-                    if (!todosResponse.ok) {
-                        throw new Error(`Error ${todosResponse.status}: No se pudieron obtener los datos "todos".`);
+                    // Obtener el porcentaje de humedad
+                    const humedadResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/porcentaje-humedad`);
+                    if (!humedadResponse.ok) {
+                        throw new Error(`Error ${humedadResponse.status}: No se pudo obtener el porcentaje de humedad.`);
                     }
-                    const todosData: SensorData[] = await todosResponse.json();
-                    setDataTodos(todosData[todosData.length - 1]); // Solo el último dato
+                    const humedadData = await humedadResponse.json();
+                    setPorcentajeHumedad(humedadData.porcentaje_humedad);
 
+                    // Obtener datos por hora
                     const porHoraResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-hora`);
                     if (!porHoraResponse.ok) {
                         throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
@@ -80,16 +88,20 @@ function Graficos() {
                     const porHoraData: SensorData[] = await porHoraResponse.json();
                     setDataPorHora(porHoraData.slice(0, 10)); // Todos los datos con limite de 10
 
+                    // Obtener datos por día
                     const porDiaResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-dia`);
                     if (!porDiaResponse.ok) {
                         throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
                     }
                     const porDiaData: SensorData[] = await porDiaResponse.json();
-                    setDataPorDia(porDiaData.slice(-7)); // Últimos 7 días
+                    setDataPorDia(porDiaData.slice(0, 7)); // Últimos 7 días
                 }
+
+                setIsLoading(false); // Cambiar el estado de carga a falso cuando los datos estén listos
             } catch (error: any) {
                 console.error('Error al sincronizar o obtener los datos:', error);
                 setError(error.message);
+                setIsLoading(false); // Asegurarse de que el estado de carga se actualice incluso si hay un error
             }
         };
 
@@ -97,63 +109,19 @@ function Graficos() {
         const interval = setInterval(syncAndFetchData, 100000);
         return () => clearInterval(interval);
     }, [id_parcela]);
-    const radarData = dataTodos
+
+    const doughnutData = porcentajeHumedad !== null
         ? {
-            labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
+            labels: ['Humedad', 'Resto'],
             datasets: [
                 {
-                    label: 'Datos de sensores',
-                    data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fondo entre las líneas
-                    borderColor: 'rgba(54, 162, 235, 1)', // Color de las líneas
-                    pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Color de los puntos
-                    pointBorderColor: '#fff', // Borde de los puntos
-                    pointHoverBackgroundColor: '#fff', // Fondo de los puntos al pasar el mouse
-                    pointHoverBorderColor: 'rgba(54, 162, 235, 1)', // Borde de los puntos al pasar el mouse
-                    fill: true, // Habilitar el fondo entre las líneas
+                    data: [porcentajeHumedad, 100 - porcentajeHumedad],
+                    backgroundColor: ['#36A2EB', '#FFCE56'],
+                    hoverBackgroundColor: ['#36A2EB', '#FFCE56'],
                 },
             ],
         }
         : null;
-    const radarOptions = {
-        responsive: true,
-        maintainAspectRatio: false, // Evita problemas de redimensionamiento
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top' as const, // Posición de la leyenda
-                labels: {
-                    font: {
-                        size: 14, // Tamaño de la fuente de la leyenda
-                    },
-                    color: '#333', // Color del texto de la leyenda
-                },
-            },
-        },
-        scales: {
-            r: {
-                angleLines: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Color de las líneas angulares
-                },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.1)', // Color de las líneas del grid
-                },
-                ticks: {
-                    display: true, // Mostrar los números en el radar
-                    color: '#666', // Color de los números
-                    font: {
-                        size: 1, // Tamaño de la fuente de los números
-                    },
-                },
-                pointLabels: {
-                    font: {
-                        size: 14, // Tamaño de la fuente de las etiquetas
-                    },
-                    color: '#444', // Color de las etiquetas
-                },
-            },
-        },
-    };
 
     const lineData = {
         labels: dataPorHora.map((data) => data.hora),
@@ -216,44 +184,66 @@ function Graficos() {
             <HeaderGrafic></HeaderGrafic>
             <Sidebar></Sidebar>
             <div className="contenido">
-                <h1 style={{ textAlign: 'center' }}>{nombreParcela}</h1>
-                <h2 style={{ textAlign: 'center' }}>Datos Historicos de Sensores</h2>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {isLoading ? (
+                    <div className="loading-container" style={{ textAlign: 'center', marginTop: '20%' }}>
+                        <h2>Cargando datos...</h2>
+                    </div>
+                ) : (
+                    <>
+                        <h1 style={{ marginLeft: '52%' }}>{nombreParcela}</h1>
+                        {error && <p style={{ color: 'red' }}>{error}</p>}
 
-                <div className="card-graficos">
-                    <h2>Datos de sensores</h2>
-                    {radarData ? (
-                        <div className="chart-container" style={{ width: '400px', height: '400px' }}>
-                            <Radar data={radarData} options={radarOptions} />
+                        {/* Contenedor de las Cards */}
+                        <div className="cards-section">
+                            {dataPorHora.length > 0 ? (
+                                <>
+                                    <CardTemp temperatura={dataPorHora[0].temperatura} />
+                                    <CardHum humedad={dataPorHora[0].humedad} />
+                                    <Cardlluvia lluvia={dataPorHora[0].lluvia} />
+                                    <CardSol sol={dataPorHora[0].sol} />
+                                </>
+                            ) : (
+                                <p>Cargando datos de la parcela...</p>
+                            )}
                         </div>
-                    ) : (
-                        <p>No hay datos disponibles.</p>
-                    )}
-                </div>
 
-                <div className="card-graficos">
-                    <h2>Datos Por Hora</h2>
-                    {dataPorHora.length > 0 ? (
-                        <div className="chart-container" style={{ width: '900px', height: '600px' }}>
-                            <Line data={lineData} />
-                        </div>
-                    ) : (
-                        <p>No hay datos disponibles.</p>
-                    )}
-                </div>
+                        <section className="graficos-section">
+                            <div className="grafico-container">
+                                <h2>Porcentaje de Humedad</h2>
+                                {doughnutData ? (
+                                    <div className="chart-container" style={{ width: '300px', height: '400px' }}>
+                                        <Doughnut data={doughnutData} />
+                                    </div>
+                                ) : (
+                                    <p>No hay datos disponibles.</p>
+                                )}
+                            </div>
 
-                <div className="card-graficos">
-                    <h2>Últimos 7 Días</h2>
-                    {dataPorDia.length > 0 ? (
-                        <div className="chart-container" style={{ width: '700px', height: '400px' }}>
-                            <Bar data={barData} />
-                        </div>
-                    ) : (
-                        <p>No hay datos disponibles.</p>
-                    )}
-                </div>
+                            <div className="grafico-container">
+                                <h2>Datos de Sensores por Hora</h2>
+                                {dataPorHora.length > 0 ? (
+                                    <div className="chart-container" style={{ width: '700px', height: '400px' }}>
+                                        <Line data={lineData} />
+                                    </div>
+                                ) : (
+                                    <p>No hay datos disponibles.</p>
+                                )}
+                            </div>
+
+                            <div className="grafico-container">
+                                <h2>Datos de Sensores los Últimos 7 Días</h2>
+                                {dataPorDia.length > 0 ? (
+                                    <div className="chart-container" style={{ width: '600px', height: '400px' }}>
+                                        <Bar data={barData} />
+                                    </div>
+                                ) : (
+                                    <p>No hay datos disponibles.</p>
+                                )}
+                            </div>
+                        </section>
+                    </>
+                )}
             </div>
-
         </div>
     );
 }

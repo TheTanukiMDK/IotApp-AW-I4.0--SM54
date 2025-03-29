@@ -6,10 +6,9 @@ function HeaderParcelBorr() {
         <div>
             <header>
                 <div className="header-left">
-                    <div className="header-icon">🌱</div>
+                    <div className="header-icon"></div>
                     <h1 className="header-title">Cultivos del mundo | Parcelas Eliminadas</h1>
                 </div>
-                <div className="header-avatar">RV</div>
             </header>
         </div>
     )

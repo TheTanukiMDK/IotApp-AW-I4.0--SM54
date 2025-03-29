@@ -28,34 +28,3 @@
     color: #666;
   }
   
-  .card.temperature {
-  background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
-}
-
-.card.temperature .card-description {
-  color: #ef4444;
-}
-
-.card.humidity {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-}
-
-.card.humidity .card-description {
-  color: #0ea5e9;
-}
-
-.card.rain {
-  background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
-}
-
-.card.rain .card-description {
-  color: #8b5cf6;
-}
-
-.card.sun {
-  background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
-}
-
-.card.sun .card-description {
-  color: #f59e0b;
-}

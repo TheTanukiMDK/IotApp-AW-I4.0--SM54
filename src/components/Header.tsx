@@ -6,10 +6,9 @@ function Header() {
     <>
     <header>
     <div className="header-left">
-        <div className="header-icon">🌱</div>
-        <h1 className="header-title">Cultivos del mundo | Mapa de Ubicaciones</h1>
+        <div className="header-icon"></div>
+        <h1 className="header-title">Cultivos del Sur | Mapa de Ubicaciones</h1>
     </div>
-    <div className="header-avatar">RV</div>
 </header>
 
     </>

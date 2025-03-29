@@ -1,64 +1,62 @@
-.graficos {
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    background-color: #f5f7fa;
-  }
-  
-  .contenido {
+* Sección de gráficos con diseño de cuadrícula */
+.graficos-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Dos columnas: la primera más ancha que la segunda */
+    grid-template-rows: auto auto; /* Dos filas: una para "hora", otra para "días" */
+    gap: 2rem; /* Espaciado entre las gráficas */
+    padding: 2rem;
+    background-color: #f5f7fa; /* Fondo general */
+    margin-left: 15%;
+    max-width: 1400px;
+}
+
+/* Contenedor para cada gráfica y su título */
+.grafico-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 2rem;
-    margin-left: 240px;
-    overflow-y: auto;
-    max-height: calc(100vh - 70px);
-  }
-  
-  .contenido h1 {
-    margin-bottom: 2rem;
-    color: #1e293b;
-    font-size: 1.875rem;
-    font-weight: 700;
-  }
-  
-  .card-graficos {
-    background-color: #ffffff;
+    justify-content: center;
+    background-color: #ffffff; /* Fondo blanco para cada gráfica */
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 1.5rem;
-    margin: 1rem 0;
-    width: 90%;
-    max-width: 1000px;
+    gap: 1rem; /* Espaciado entre el título y la gráfica */
+}
+
+/* Títulos de las gráficas */
+.grafico-container h2 {
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .card-graficos:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  }
-  
-  .card-graficos h2 {
-    margin-bottom: 1.5rem;
     font-size: 1.5rem;
     color: #1e293b;
-    font-weight: 600;
-  }
-  
-  .card-graficosp {
-    color: #64748b;
-    font-size: 1rem;
-  }
-  
-  .card-graficos .chart-container {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-  }
-  
-  
+    margin: 0;
+}
+
+/* Gráfica de "Porcentaje de Humedad" */
+.graficos-section .grafico-container:nth-child(1) {
+    grid-column: 2; /* Ocupa la segunda columna */
+    grid-row: 1; /* Primera fila */
+}
+
+/* Gráfica de "Datos de Sensores por Hora" */
+.graficos-section .grafico-container:nth-child(2) {
+    grid-column: 1; /* Ocupa la primera columna */
+    grid-row: 1; /* Primera fila */
+}
+
+/* Gráfica de "Datos de Sensores los Últimos 7 Días" */
+.graficos-section .grafico-container:nth-child(3) {
+    grid-column: 1 / span 2; /* Ocupa ambas columnas */
+    grid-row: 2; /* Segunda fila */
+}
+
+/* Contenedor de las Cards */
+
+.cards-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  gap: 1rem; /* Reducir el espaciado entre las cards */
+  margin: 1rem 0; /* Reducir el espaciado vertical */
+  padding: 0 1rem; /* Reducir el espaciado horizontal */
+  max-width: 1400px; /* Ancho máximo */
+  margin-left: 15%; /* Alinear con la sección de gráficos */
+}

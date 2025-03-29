@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Radar, Line, Bar } from 'react-chartjs-2';
+import { Doughnut, Line, Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -32,6 +32,7 @@ ChartJS.register(
     Filler
 );
 
+
 interface SensorData {
     fecha: string;
     hora: string;
@@ -42,7 +43,7 @@ interface SensorData {
 }
 
 function Graficos() {
-    const [dataTodos, setDataTodos] = useState<SensorData | null>(null);
+    const [porcentajeHumedad, setPorcentajeHumedad] = useState<number | null>(null);
     const [dataPorHora, setDataPorHora] = useState<SensorData[]>([]);
     const [dataPorDia, setDataPorDia] = useState<SensorData[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -54,12 +55,14 @@ function Graficos() {
                 if (!syncResponse.ok) {
                     throw new Error(`Error ${syncResponse.status}: No se pudo sincronizar los datos.`);
                 }
-                const todosResponse = await fetch('http://localhost:8080/sensores-generales');
-                if (!todosResponse.ok) {
-                    throw new Error(`Error ${todosResponse.status}: No se pudieron obtener los datos "todos".`);
+                const humedadResponse = await fetch(
+                    'http://localhost:8080/sensores-generales/porcentaje-humedad'
+                );
+                if (!humedadResponse.ok) {
+                    throw new Error(`Error ${humedadResponse.status}: No se pudo obtener el porcentaje de humedad.`);
                 }
-                const todosData: SensorData[] = await todosResponse.json();
-                setDataTodos(todosData[todosData.length - 1]); // Solo el último dato
+                const humedadData = await humedadResponse.json();
+                setPorcentajeHumedad(humedadData.porcentaje_humedad);
 
                 const porHoraResponse = await fetch('http://localhost:8080/sensores-generales/por-hora');
                 if (!porHoraResponse.ok) {
@@ -85,23 +88,17 @@ function Graficos() {
         return () => clearInterval(interval);
     }, []);
 
-    const radarData = dataTodos
+    const doughnutData = porcentajeHumedad !== null
         ? {
-              labels: ['Humedad', 'Temperatura', 'Lluvia', 'Sol'],
-              datasets: [
-                  {
-                      label: 'Datos de sensores',
-                      data: [dataTodos.humedad, dataTodos.temperatura, dataTodos.lluvia, dataTodos.sol],
-                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                      pointBorderColor: '#fff',
-                      pointHoverBackgroundColor: '#fff',
-                      pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-                      fill: true,
-                  },
-              ],
-          }
+            labels: ['Humedad', 'Resto'],
+            datasets: [
+                {
+                    data: [porcentajeHumedad, 100 - porcentajeHumedad],
+                    backgroundColor: ['#36A2EB', '#FFCE56'],
+                    hoverBackgroundColor: ['#36A2EB', '#FFCE56'],
+                },
+            ],
+        }
         : null;
 
     const radarOptions = {
@@ -206,14 +203,14 @@ function Graficos() {
             <Sidebar></Sidebar>
             <div className="contenido">
                 <h1 style={{ textAlign: 'center' }}>Datos Generales</h1>
-                <h2 style={{ textAlign: 'center' }}>Datos Históricos de Sensores</h2>
+                <h2 style={{ textAlign: 'center' }}>Datos Históricos</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className="card-graficos">
-                    <h2>Datos de sensores</h2>
-                    {radarData ? (
+                    <h2>Porcentaje de humedad</h2>
+                    {doughnutData ? (
                         <div className="chart-container" style={{ width: '400px', height: '400px' }}>
-                            <Radar data={radarData} options={radarOptions} />
+                            <Doughnut data={doughnutData} />
                         </div>
                     ) : (
                         <p>No hay datos disponibles.</p>
@@ -221,7 +218,7 @@ function Graficos() {
                 </div>
 
                 <div className="card-graficos">
-                    <h2>Datos Por Hora</h2>
+                    <h2>Datos de sensores por hora</h2>
                     {dataPorHora.length > 0 ? (
                         <div className="chart-container" style={{ width: '900px', height: '600px' }}>
                             <Line data={lineData} />
@@ -232,7 +229,7 @@ function Graficos() {
                 </div>
 
                 <div className="card-graficos">
-                    <h2>Últimos 7 Días</h2>
+                    <h2>Datos de sensores los Últimos 7 Días</h2>
                     {dataPorDia.length > 0 ? (
                         <div className="chart-container" style={{ width: '700px', height: '400px' }}>
                             <Bar data={barData} />

@@ -69,13 +69,13 @@ function ParcelasDelete() {
       <div className='contenido1'>
         <div className='table-div'>
           {loading ? (
-            <p>Cargando datos...</p>
+            <p className='loading-delete'>Cargando datos...</p>
           ) : error ? (
             <p>Error: {error}</p>
           ) : parcelas.length === 0 ? (
             <p>No hay parcelas borradas.</p>
           ) : (
-            <table className='table-structure'>
+            <table className='table-modern'>
               <thead>
                 <tr>
                   <th>Nombre de <br></br> proyecto</th>
