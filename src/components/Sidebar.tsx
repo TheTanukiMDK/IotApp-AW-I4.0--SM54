@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/Sidebar.css";
+import profile from "../assets/profile.png";
 import {
 
   BarChart2,
@@ -94,7 +95,7 @@ const Sidebar: React.FC = () => {
       </ul>
       <div className="user-account">
         <div className="user-profile">
-          <img src="images/profile-img.jpg" alt="Profile" />
+          <img src={profile} alt="Profile" />
           <div className="user-detail">
             <h3>Adia</h3>
             <span>Desinger UX/UI</span>
