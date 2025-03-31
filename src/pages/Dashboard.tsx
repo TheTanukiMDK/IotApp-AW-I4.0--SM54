@@ -76,7 +76,7 @@ function Dashboard() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const markersRef = useRef<mapboxgl.Marker[]>([]);
-
+    const [isLoading, setIsLoading] = useState(true);
     const [parcelas, setParcelas] = useState<Parcela[]>([]);
     const [parcelaSeleccionada, setParcelaSeleccionada] = useState<Parcela | null>(null);
     const [sensores, setSensores] = useState<Sensores | null>(null);
@@ -130,10 +130,10 @@ function Dashboard() {
 
                 bounds.extend([longitud, latitud]);
 
-                const popup = new mapboxgl.Popup({ 
+                const popup = new mapboxgl.Popup({
                     offset: 25,
                     anchor: 'left',
-                 })
+                })
                     .setHTML(`
                        <div style="
             font-size: 14px; 
@@ -151,13 +151,7 @@ function Dashboard() {
             <p style="margin: 0; font-weight: bold;">Cultivo:</p>
             <p style="margin: 0 0 8px;">${tipo_cultivo}</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0;" />
-            <h4 style="margin: 0 0 8px; font-size: 14px; color: #555;">Datos de Sensores:</h4>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li><strong>Temperatura:</strong> ${sensor.temperatura} °C</li>
-                <li><strong>Humedad:</strong> ${sensor.humedad} %</li>
-                <li><strong>Lluvia:</strong> ${sensor.lluvia} mm</li>
-                <li><strong>Sol:</strong> ${sensor.sol} W/m²</li>
-            </ul>
+
             <button 
                 class="graf-btn" 
                 data-id="${id}" 
@@ -230,30 +224,32 @@ function Dashboard() {
                     throw new Error(`Error ${porDiaResponse.status}: No se pudieron obtener los datos "por día".`);
                 }
                 const porDiaData: SensorData[] = await porDiaResponse.json();
-                setDataPorDia(porDiaData.slice(-7));
+                setDataPorDia(porDiaData.slice(0, 7));
+                setIsLoading(false);
             } catch (error: any) {
                 console.error('Error al obtener los datos:', error);
                 setError(error.message);
+                setIsLoading(false);
             }
         };
 
         fetchData();
-        const interval = setInterval(fetchData, 100000);
+        const interval = setInterval(fetchData, 3600000);
         return () => clearInterval(interval);
     }, []);
 
     const doughnutData = porcentajeHumedad !== null
-        ? {
-            labels: ['Humedad', 'Resto'],
-            datasets: [
-                {
-                    data: [porcentajeHumedad, 100 - porcentajeHumedad],
-                    backgroundColor: ['#36A2EB', '#FFCE56'],
-                    hoverBackgroundColor: ['#36A2EB', '#FFCE56'],
-                },
-            ],
-        }
-        : null;
+    ? {
+        labels: ['Humedad', 'Resto'],
+        datasets: [
+            {
+                data: [porcentajeHumedad, 100 - porcentajeHumedad],
+                backgroundColor: ['#00d7e5', '#cafcff'],
+                hoverBackgroundColor: ['#00d7e5', '#cafcff'],
+            },
+        ],
+    }
+    : null;
 
     const lineData = {
         labels: dataPorHora.map((data) => data.hora),
@@ -261,26 +257,34 @@ function Dashboard() {
             {
                 label: 'Humedad',
                 data: dataPorHora.map((data) => data.humedad),
-                borderColor: '#36A2EB',
-                fill: false,
+                borderColor: '#00d7e5',
+             
+                tension: 0.4, // Líneas redondeadas
+                
             },
             {
                 label: 'Temperatura',
                 data: dataPorHora.map((data) => data.temperatura),
-                borderColor: '#FF6384',
-                fill: false,
+                borderColor: '#ffe123',
+              
+                tension: 0.4,
+               
             },
             {
                 label: 'Lluvia',
                 data: dataPorHora.map((data) => data.lluvia),
-                borderColor: '#FFCE56',
-                fill: false,
+                borderColor: '#2370ff',
+                
+                tension: 0.4,
+               
             },
             {
                 label: 'Sol',
                 data: dataPorHora.map((data) => data.sol),
-                borderColor: '#4BC0C0',
-                fill: false,
+                borderColor: '#ffac41',
+               
+                tension: 0.4,
+               
             },
         ],
     };
@@ -291,22 +295,22 @@ function Dashboard() {
             {
                 label: 'Humedad',
                 data: dataPorDia.map((data) => data.humedad),
-                backgroundColor: '#36A2EB',
+                backgroundColor: '#00d7e5',
             },
             {
                 label: 'Temperatura',
                 data: dataPorDia.map((data) => data.temperatura),
-                backgroundColor: '#FF6384',
+                backgroundColor: '#ffe123',
             },
             {
                 label: 'Lluvia',
                 data: dataPorDia.map((data) => data.lluvia),
-                backgroundColor: '#FFCE56',
+                backgroundColor: '#2370ff',
             },
             {
                 label: 'Sol',
                 data: dataPorDia.map((data) => data.sol),
-                backgroundColor: '#4BC0C0',
+                backgroundColor: '#ffac41',
             },
         ],
     };
@@ -336,40 +340,47 @@ function Dashboard() {
                             </div>
                         </section>
                     </div>
-                    <section className="graficos-section">
-                        <div className="grafico-container">
-                            <h2>Porcentaje de Humedad</h2>
-                            {doughnutData ? (
-                                <div className="chart-container" style={{ width: '300px', height: '400px' }}>
-                                    <Doughnut data={doughnutData} />
+                    {isLoading ? (
+                        <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Cargando gráficos...</p>
+                    ) : (
+                        <>
+                            <section className="graficos-section">
+                                <div className="grafico-container">
+                                    <h2>Porcentaje de Humedad</h2>
+                                    {doughnutData ? (
+                                        <div className="chart-container" style={{ width: '300px', height: '400px' }}>
+                                            <Doughnut data={doughnutData} />
+                                        </div>
+                                    ) : (
+                                        <p>No hay datos disponibles.</p>
+                                    )}
                                 </div>
-                            ) : (
-                                <p>No hay datos disponibles.</p>
-                            )}
-                        </div>
 
-                        <div className="grafico-container">
-                            <h2>Datos de Sensores por Hora</h2>
-                            {dataPorHora.length > 0 ? (
-                                <div className="chart-container" style={{ width: '700px', height: '400px' }}>
-                                    <Line data={lineData} />
+                                <div className="grafico-container">
+                                    <h2>Datos de Sensores por Hora</h2>
+                                    {dataPorHora.length > 0 ? (
+                                        <div className="chart-container" style={{ width: '700px', height: '400px' }}>
+                                            <Line data={lineData} />
+                                        </div>
+                                    ) : (
+                                        <p>No hay datos disponibles.</p>
+                                    )}
                                 </div>
-                            ) : (
-                                <p>No hay datos disponibles.</p>
-                            )}
-                        </div>
 
-                        <div className="grafico-container">
-                            <h2>Datos de Sensores los Últimos 7 Días</h2>
-                            {dataPorDia.length > 0 ? (
-                                <div className="chart-container" style={{ width: '600px', height: '400px' }}>
-                                    <Bar data={barData} />
+                                <div className="grafico-container">
+                                    <h2>Datos de Sensores los Últimos 7 Días</h2>
+                                    {dataPorDia.length > 0 ? (
+                                        <div className="chart-container" style={{ width: '800px', height: '400px' }}>
+                                            <Bar data={barData} />
+                                        </div>
+                                    ) : (
+                                        <p>No hay datos disponibles.</p>
+                                    )}
                                 </div>
-                            ) : (
-                                <p>No hay datos disponibles.</p>
-                            )}
-                        </div>
-                    </section>
+                            </section>
+                        </>
+                    )}
+
                 </main>
             </div>
         </>

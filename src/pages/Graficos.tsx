@@ -106,22 +106,22 @@ function Graficos() {
         };
 
         syncAndFetchData();
-        const interval = setInterval(syncAndFetchData, 100000);
+        const interval = setInterval(syncAndFetchData, 3600000);
         return () => clearInterval(interval);
     }, [id_parcela]);
 
     const doughnutData = porcentajeHumedad !== null
-        ? {
-            labels: ['Humedad', 'Resto'],
-            datasets: [
-                {
-                    data: [porcentajeHumedad, 100 - porcentajeHumedad],
-                    backgroundColor: ['#36A2EB', '#FFCE56'],
-                    hoverBackgroundColor: ['#36A2EB', '#FFCE56'],
-                },
-            ],
-        }
-        : null;
+    ? {
+        labels: ['Humedad', 'Resto'],
+        datasets: [
+            {
+                data: [porcentajeHumedad, 100 - porcentajeHumedad],
+                backgroundColor: ['#00d7e5', '#cafcff'],
+                hoverBackgroundColor: ['#00d7e5', '#cafcff'],
+            },
+        ],
+    }
+    : null;
 
     const lineData = {
         labels: dataPorHora.map((data) => data.hora),
@@ -129,26 +129,34 @@ function Graficos() {
             {
                 label: 'Humedad',
                 data: dataPorHora.map((data) => data.humedad),
-                borderColor: '#36A2EB',
-                fill: false,
+                borderColor: '#00d7e5',
+             
+                tension: 0.4, // Líneas redondeadas
+                
             },
             {
                 label: 'Temperatura',
                 data: dataPorHora.map((data) => data.temperatura),
-                borderColor: '#FF6384',
-                fill: false,
+                borderColor: '#ffe123',
+              
+                tension: 0.4,
+               
             },
             {
                 label: 'Lluvia',
                 data: dataPorHora.map((data) => data.lluvia),
-                borderColor: '#FFCE56',
-                fill: false,
+                borderColor: '#2370ff',
+                
+                tension: 0.4,
+               
             },
             {
                 label: 'Sol',
                 data: dataPorHora.map((data) => data.sol),
-                borderColor: '#4BC0C0',
-                fill: false,
+                borderColor: '#ffac41',
+               
+                tension: 0.4,
+               
             },
         ],
     };
@@ -159,25 +167,26 @@ function Graficos() {
             {
                 label: 'Humedad',
                 data: dataPorDia.map((data) => data.humedad),
-                backgroundColor: '#36A2EB',
+                backgroundColor: '#00d7e5',
             },
             {
                 label: 'Temperatura',
                 data: dataPorDia.map((data) => data.temperatura),
-                backgroundColor: '#FF6384',
+                backgroundColor: '#ffe123',
             },
             {
                 label: 'Lluvia',
                 data: dataPorDia.map((data) => data.lluvia),
-                backgroundColor: '#FFCE56',
+                backgroundColor: '#2370ff',
             },
             {
                 label: 'Sol',
                 data: dataPorDia.map((data) => data.sol),
-                backgroundColor: '#4BC0C0',
+                backgroundColor: '#ffac41',
             },
         ],
     };
+
 
     return (
         <div className="graficos">
@@ -233,7 +242,7 @@ function Graficos() {
                             <div className="grafico-container">
                                 <h2>Datos de Sensores los Últimos 7 Días</h2>
                                 {dataPorDia.length > 0 ? (
-                                    <div className="chart-container" style={{ width: '600px', height: '400px' }}>
+                                    <div className="chart-container" style={{ width: '800px', height: '400px' }}>
                                         <Bar data={barData} />
                                     </div>
                                 ) : (

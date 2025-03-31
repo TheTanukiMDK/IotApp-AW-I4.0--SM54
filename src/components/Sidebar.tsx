@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
       <div className="sidebar-header">
         <h1>🌱
         </h1>
-        <h2>AgricultDev</h2>
+        <h2>SmartCrop</h2>
       </div>
       <ul className="sidebar-links">
         <h4>

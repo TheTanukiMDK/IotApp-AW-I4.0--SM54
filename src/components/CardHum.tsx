@@ -8,7 +8,7 @@ function CardHum({ humedad }: CardHumProps) {
   return (
     <div className="card humidity">
       <h2 className="card-title">Humedad</h2>
-      <Droplets size="2rem" />
+      <Droplets size="3rem" />
       <p className="card-description">{humedad} %</p>
     </div>
   )

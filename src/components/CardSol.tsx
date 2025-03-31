@@ -9,7 +9,7 @@ function CardSol({ sol }: CardSolProps) {
   return (
     <div className="card sun">
       <h2 className="card-title">Sol</h2>
-      <Sun size="2rem" />
+      <Sun size="3rem" />
       <p className="card-description">{sol} %</p>
     </div>
   )

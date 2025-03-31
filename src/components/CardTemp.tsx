@@ -9,7 +9,7 @@ function CardTemp({ temperatura }: CardTempProps) {
   return (
     <div className="card temperature">
       <h2 className="card-title">Temperatura</h2>
-      <ThermometerSun size="2rem" />
+      <ThermometerSun size="3rem" />
       <p className="card-description">{temperatura} °C</p>
     </div>
   )

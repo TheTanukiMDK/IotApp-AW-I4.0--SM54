@@ -57,6 +57,6 @@
   gap: 1rem; /* Reducir el espaciado entre las cards */
   margin: 1rem 0; /* Reducir el espaciado vertical */
   padding: 0 1rem; /* Reducir el espaciado horizontal */
-  max-width: 1400px; /* Ancho máximo */
-  margin-left: 15%; /* Alinear con la sección de gráficos */
+  max-width: 1700px; /* Ancho máximo */
+  margin-left: 17%; /* Alinear con la sección de gráficos */
 }
