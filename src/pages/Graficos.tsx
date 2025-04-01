@@ -48,7 +48,6 @@ interface SensorData {
 
 function Graficos() {
     const { id_parcela } = useParams<{ id_parcela: string }>();
-    const [isLoading, setIsLoading] = useState(true); // Nuevo estado para controlar la carga
     const [porcentajeHumedad, setPorcentajeHumedad] = useState<number | null>(null);
     const [dataPorHora, setDataPorHora] = useState<SensorData[]>([]);
     const [dataPorDia, setDataPorDia] = useState<SensorData[]>([]);
@@ -86,7 +85,7 @@ function Graficos() {
                         throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
                     }
                     const porHoraData: SensorData[] = await porHoraResponse.json();
-                    setDataPorHora(porHoraData.slice(0, 10)); // Todos los datos con limite de 10
+                    setDataPorHora(porHoraData.slice(0, 9)); // Todos los datos con limite de 10
 
                     // Obtener datos por día
                     const porDiaResponse = await fetch(`http://localhost:8080/sensores/${id_parcela}/por-dia`);
@@ -97,16 +96,16 @@ function Graficos() {
                     setDataPorDia(porDiaData.slice(0, 7)); // Últimos 7 días
                 }
 
-                setIsLoading(false); // Cambiar el estado de carga a falso cuando los datos estén listos
+               
             } catch (error: any) {
                 console.error('Error al sincronizar o obtener los datos:', error);
                 setError(error.message);
-                setIsLoading(false); // Asegurarse de que el estado de carga se actualice incluso si hay un error
+              
             }
         };
 
         syncAndFetchData();
-        const interval = setInterval(syncAndFetchData, 3600000);
+        const interval = setInterval(syncAndFetchData, 60000);
         return () => clearInterval(interval);
     }, [id_parcela]);
 
@@ -193,12 +192,7 @@ function Graficos() {
             <HeaderGrafic></HeaderGrafic>
             <Sidebar></Sidebar>
             <div className="contenido">
-                {isLoading ? (
-                    <div className="loading-container" style={{ textAlign: 'center', marginTop: '20%' }}>
-                        <h2>Cargando datos...</h2>
-                    </div>
-                ) : (
-                    <>
+               
                         <h1 style={{ marginLeft: '52%' }}>{nombreParcela}</h1>
                         {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -250,8 +244,7 @@ function Graficos() {
                                 )}
                             </div>
                         </section>
-                    </>
-                )}
+             
             </div>
         </div>
     );

@@ -76,7 +76,6 @@ function Dashboard() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const markersRef = useRef<mapboxgl.Marker[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [parcelas, setParcelas] = useState<Parcela[]>([]);
     const [parcelaSeleccionada, setParcelaSeleccionada] = useState<Parcela | null>(null);
     const [sensores, setSensores] = useState<Sensores | null>(null);
@@ -217,7 +216,7 @@ function Dashboard() {
                     throw new Error(`Error ${porHoraResponse.status}: No se pudieron obtener los datos "por hora".`);
                 }
                 const porHoraData: SensorData[] = await porHoraResponse.json();
-                setDataPorHora(porHoraData.slice(0, 10));
+                setDataPorHora(porHoraData.slice(0, 9));
 
                 const porDiaResponse = await fetch('http://localhost:8080/sensores-generales/por-dia');
                 if (!porDiaResponse.ok) {
@@ -225,16 +224,16 @@ function Dashboard() {
                 }
                 const porDiaData: SensorData[] = await porDiaResponse.json();
                 setDataPorDia(porDiaData.slice(0, 7));
-                setIsLoading(false);
+         
             } catch (error: any) {
                 console.error('Error al obtener los datos:', error);
                 setError(error.message);
-                setIsLoading(false);
+          
             }
         };
 
         fetchData();
-        const interval = setInterval(fetchData, 3600000);
+        const interval = setInterval(fetchData, 60000);
         return () => clearInterval(interval);
     }, []);
 
@@ -340,10 +339,7 @@ function Dashboard() {
                             </div>
                         </section>
                     </div>
-                    {isLoading ? (
-                        <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Cargando gráficos...</p>
-                    ) : (
-                        <>
+                    
                             <section className="graficos-section">
                                 <div className="grafico-container">
                                     <h2>Porcentaje de Humedad</h2>
@@ -357,7 +353,7 @@ function Dashboard() {
                                 </div>
 
                                 <div className="grafico-container">
-                                    <h2>Datos de Sensores por Hora</h2>
+                                    <h2>Datos de Sensores por Minuto</h2>
                                     {dataPorHora.length > 0 ? (
                                         <div className="chart-container" style={{ width: '700px', height: '400px' }}>
                                             <Line data={lineData} />
@@ -378,8 +374,8 @@ function Dashboard() {
                                     )}
                                 </div>
                             </section>
-                        </>
-                    )}
+                       
+                 
 
                 </main>
             </div>

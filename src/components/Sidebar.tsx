@@ -80,11 +80,11 @@ const handleLogout = () => {
             Notifications
           </a>
         </li>*/}
-        <h4>
+       <h4>
           <span>Account</span>
           <div className="menu-separator"></div>
         </h4>
-        <li>
+        {/* <li>
           <a href="#">
             <User size={20} />
             Perfil
@@ -95,7 +95,7 @@ const handleLogout = () => {
             <Settings size={20} />
             Configuracion
           </a>
-        </li>
+        </li>*/}
         <li>
           <a onClick={handleLogout} href="#">
             <LogOut size={20} />
@@ -107,8 +107,8 @@ const handleLogout = () => {
         <div className="user-profile">
           <img src={profile} alt="Profile" />
           <div className="user-detail">
-            <h3>Adia</h3>
-            <span>Desinger UX/UI</span>
+            <h3></h3>
+            <span>Admin</span>
           </div>
         </div>
       </div>
