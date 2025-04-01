@@ -108,7 +108,7 @@ function Dashboard() {
     }, []);
 
     useEffect(() => {
-        fetch('https://moriahmkt.com/iotapp/test/')
+        fetch('https://moriahmkt.com/iotapp/updated/')
             .then((response) => response.json())
             .then((data) => {
                 setParcelas(data.parcelas);

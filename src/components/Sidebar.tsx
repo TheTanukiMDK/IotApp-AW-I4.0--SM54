@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/Sidebar.css";
 import profile from "../assets/profile.png";
+import { useNavigate } from "react-router-dom";
 import {
 
   BarChart2,
@@ -17,6 +18,15 @@ import {
 } from "lucide-react";
 
 const Sidebar: React.FC = () => {
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+    // Eliminar el token de autenticación
+    localStorage.removeItem("token");
+    // Redirigir al usuario a la página de inicio de sesión
+    navigate("/");
+};
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -87,7 +97,7 @@ const Sidebar: React.FC = () => {
           </a>
         </li>
         <li>
-          <a href="#">
+          <a onClick={handleLogout} href="#">
             <LogOut size={20} />
             Cerrar Sesion
           </a>
