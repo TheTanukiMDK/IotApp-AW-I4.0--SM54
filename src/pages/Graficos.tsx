@@ -16,7 +16,7 @@ import {
     Filler
 } from 'chart.js';
 import Sidebar from '../components/Sidebar';
-import HeaderGrafic from '../components/HeaderGrafic';
+import Header from '../components/Header';
 import CardTemp from '../components/CardTemp';
 import CardHum from '../components/CardHum';
 import Cardlluvia from '../components/Cardlluvia';
@@ -105,7 +105,7 @@ function Graficos() {
         };
 
         syncAndFetchData();
-        const interval = setInterval(syncAndFetchData, 60000);
+        const interval = setInterval(syncAndFetchData, 900000);
         return () => clearInterval(interval);
     }, [id_parcela]);
 
@@ -189,12 +189,12 @@ function Graficos() {
 
     return (
         <div className="graficos">
-            <HeaderGrafic></HeaderGrafic>
+            <Header title='Graficos'></Header>
             <Sidebar></Sidebar>
             <div className="contenido">
                
                         <h1 style={{ marginLeft: '52%' }}>{nombreParcela}</h1>
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
+                        {error && <p style={{ color: 'red',marginLeft: '52%' }}>{error}</p>}
 
                         {/* Contenedor de las Cards */}
                         <div className="cards-section">

@@ -62,7 +62,7 @@
 .wrapper .button-1{
     width: 100%;
     height: 45px;
-    background: #007BFF;
+    background: #464cff;
     border: none;
     outline: none;
     border-radius:10px ;
@@ -75,7 +75,7 @@
 }
 
 .wrapper .button-1:hover{
-    background: #004084;
+    background: rgb(51, 55, 148);
 }
 
 .google-btn:hover{
@@ -89,7 +89,7 @@
 }
 
 .register-link p a {
-    color: #045CFF;
+    color: #4046ff;
     text-decoration: none;
     font-weight: 600;
 }

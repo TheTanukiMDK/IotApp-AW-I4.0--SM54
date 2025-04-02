@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
-import HeaderParcelBorr from '../components/HeaderParcelBorr'
+import Header from '../components/Header'
 import '../css/ParcelasDelete.css'
 
 // Definición de la interfaz para los datos de las parcelas
@@ -63,17 +63,17 @@ function ParcelasDelete() {
   return (
     <>
            <div className='parcelasdelete'>
-        <HeaderParcelBorr></HeaderParcelBorr>
+        <Header title='Parcelas Elimiadas'></Header>
         <Sidebar />
       </div>
       <div className='contenido1'>
         <div className='table-div'>
           {loading ? (
-            <p className='loading-delete'>Cargando datos...</p>
+            <p style={{ fontWeight: 'bold', fontSize: '25px' }} className='loading-delete'>Cargando datos...</p>
           ) : error ? (
-            <p>Error: {error}</p>
+            <p style={{ marginLeft: '35%', fontWeight: 'bold', fontSize: '25px' }}>Error: {error}</p>
           ) : parcelas.length === 0 ? (
-            <p>No hay parcelas borradas.</p>
+            <p style={{ marginLeft: '35%', fontWeight: 'bold', fontSize: '25px' }}>No hay parcelas borradas.</p>
           ) : (
             <table className='table-modern'>
               <thead>

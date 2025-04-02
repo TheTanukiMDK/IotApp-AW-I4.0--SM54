@@ -1,13 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import Prueba from '../pages/Prueba';
 import Graficos from '../pages/Graficos';
 import ParcelasDelete from '../pages/ParcelasDelete'
-import GraficosGeneral from '../pages/GraficosGenral';
 import Login from '../pages/Login';
 import Registro from '../pages/Registro';
 import ProtectedRoute from '../components/ProtectedRouted';
 import PublicRoute from '../components/PublicRoute';
+import NotFound from '../error/NotFound';
 
 export const rutas = createBrowserRouter([
     {
@@ -46,10 +45,7 @@ export const rutas = createBrowserRouter([
             </ProtectedRoute>
     },
     {
-        path: '/graficosGeneral',
-        element:
-            <ProtectedRoute>
-                <GraficosGeneral />
-            </ProtectedRoute>
-    },
+        path: '*', // Ruta para manejar páginas no existentes
+        element: <NotFound />,
+    }
 ]);

@@ -53,7 +53,7 @@ const handleLogout = () => {
         <li>
           <a href="/parcelasDelete">
             <Trash2 size={20} />
-            Parcelas<br></br> Borradas
+            Parcelas<br></br> Eliminadas
           </a>
         </li>
         {/*<li>

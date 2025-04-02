@@ -144,13 +144,19 @@ function Dashboard() {
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); 
             background-color: #fff;
         ">
-            <h3 style="margin: 0 0 8px; font-size: 16px; color: #007BFF;">${nombre}</h3>
+            <h3 style="margin: 0 0 8px; font-size: 16px; color:rgb(87, 93, 255);">${nombre}</h3>
             <p style="margin: 0; font-weight: bold;">Responsable:</p>
             <p style="margin: 0 0 8px;">${responsable}</p>
             <p style="margin: 0; font-weight: bold;">Cultivo:</p>
             <p style="margin: 0 0 8px;">${tipo_cultivo}</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0;" />
-
+ <h4 style="margin: 0 0 8px; font-size: 14px; color: #555;">Datos de Sensores:</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li><strong>Temperatura:</strong> ${sensor.temperatura} °C</li>
+                <li><strong>Humedad:</strong> ${sensor.humedad} %</li>
+                <li><strong>Lluvia:</strong> ${sensor.lluvia} mm</li>
+                <li><strong>Sol:</strong> ${sensor.sol} W/m²</li>
+            </ul>
             <button 
                 class="graf-btn" 
                 data-id="${id}" 
@@ -159,7 +165,7 @@ function Dashboard() {
                     padding: 8px 12px; 
                     font-size: 14px; 
                     color: #fff; 
-                    background-color: #007BFF; 
+                    background-color:rgb(72, 79, 255); 
                     border: none; 
                     border-radius: 4px; 
                     cursor: pointer;
@@ -233,9 +239,12 @@ function Dashboard() {
         };
 
         fetchData();
-        const interval = setInterval(fetchData, 60000);
+        const interval = setInterval(fetchData, 900000);
         return () => clearInterval(interval);
     }, []);
+
+    const latestSensorData = dataPorHora.length > 0 ? dataPorHora[0] : null;
+
 
     const doughnutData = porcentajeHumedad !== null
     ? {
@@ -317,7 +326,7 @@ function Dashboard() {
     return (
         <>
             <div className="dashboard">
-                <Header />
+                <Header title='Mapa de ubicaciones' />
                 <Sidebar />
                 <main className="main-content">
                     <div className="container-map-cards">
@@ -326,12 +335,12 @@ function Dashboard() {
                                 <div ref={mapContainerRef} className="map-container" />
                             </div>
                             <div className="cards">
-                                {sensores ? (
+                                {latestSensorData ? (
                                     <>
-                                        <CardTemp temperatura={sensores.temperatura} />
-                                        <CardHum humedad={sensores.humedad} />
-                                        <Cardlluvia lluvia={sensores.lluvia} />
-                                        <CardSol sol={sensores.sol} />
+                                         <CardTemp temperatura={Math.floor(latestSensorData.temperatura)} />
+                                        <CardHum humedad={Math.floor(latestSensorData.humedad)} />
+                                        <Cardlluvia lluvia={Math.floor(latestSensorData.lluvia)} />
+                                        <CardSol sol={Math.floor(latestSensorData.sol)} />
                                     </>
                                 ) : (
                                     <p>Cargando datos de sensores...</p>
@@ -339,8 +348,9 @@ function Dashboard() {
                             </div>
                         </section>
                     </div>
-                    
+                    <h2 style={{ marginLeft: '50%', marginTop: '10px' }}>Datos Historicos</h2>
                             <section className="graficos-section">
+                           
                                 <div className="grafico-container">
                                     <h2>Porcentaje de Humedad</h2>
                                     {doughnutData ? (
@@ -353,7 +363,7 @@ function Dashboard() {
                                 </div>
 
                                 <div className="grafico-container">
-                                    <h2>Datos de Sensores por Minuto</h2>
+                                    <h2>Datos de Sensores por Hora</h2>
                                     {dataPorHora.length > 0 ? (
                                         <div className="chart-container" style={{ width: '700px', height: '400px' }}>
                                             <Line data={lineData} />

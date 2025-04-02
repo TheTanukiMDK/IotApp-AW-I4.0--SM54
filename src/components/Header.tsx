@@ -1,13 +1,17 @@
 import React from 'react'
 import '../css/Header.css'
 
-function Header() {
+interface HeaderProps {
+  title: string;
+}
+
+function Header({title}: HeaderProps) {
   return (
     <>
     <header>
     <div className="header-left">
         <div className="header-icon"></div>
-        <h1 className="header-title">Cultivos del Sur | Mapa de Ubicaciones</h1>
+        <h1 className="header-title">Cultivos del Sur | {title}</h1>
     </div>
 </header>
 

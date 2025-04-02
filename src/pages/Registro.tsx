@@ -42,7 +42,7 @@ function Register() {
             Swal.fire({
                 icon: 'error',
                 title: 'Contraseña inválida',
-                text: 'La contraseña debe tener al menos 8 caracteres y solo puede contener letras, números y caracteres especiales !@#$%^&*()_+=-',
+                text: 'La contraseña debe tener al menos 8 caracteres',
             });
             return;
         }

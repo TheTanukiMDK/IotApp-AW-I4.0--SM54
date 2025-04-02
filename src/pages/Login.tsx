@@ -79,7 +79,7 @@ function Login() {
                     <button className='button-1' type='submit'>Ingresar</button>
                     <div className='register-link'>
                         <p>¿No tienes cuenta? <a href='/Registro'>Regístrate</a></p>
-                        <p><a href=''>Olvide mi contraseña</a></p>
+                        {/*<p><a href=''>Olvide mi contraseña</a></p>*/}
                     </div>
                 </form>
             </div>

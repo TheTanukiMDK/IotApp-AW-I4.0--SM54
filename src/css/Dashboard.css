@@ -114,7 +114,7 @@ body {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
     font-weight: 500;
-    background-color: #3b82f6;
+    background-color: #474dff;
     color: white;
     border: none;
     border-radius: 8px;
@@ -125,7 +125,7 @@ body {
   }
   
   .graf-btn:hover {
-    background-color: #2563eb;
+    background-color: #4f52ba;
     transform: translateY(-2px);
   }
   
