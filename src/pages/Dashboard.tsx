@@ -94,7 +94,7 @@ function Dashboard() {
             mapRef.current = new mapboxgl.Map({
                 container: mapContainerRef.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
-                center: [-74.5, 40],
+                center: [-86.8,21],
                 zoom: 9,
             });
         }
@@ -107,9 +107,11 @@ function Dashboard() {
     }, []);
 
     useEffect(() => {
-        fetch('https://moriahmkt.com/iotapp/updated/')
+        //fetch('http://localhost:8080/parcelas')
+       fetch('https://moriahmkt.com/iotapp/updated/')
             .then((response) => response.json())
             .then((data) => {
+                console.log('Datos de parcelas:', data);
                 setParcelas(data.parcelas);
                 setParcelaSeleccionada(data.parcelas[0]);
                 setSensores(data.sensores);
@@ -119,74 +121,80 @@ function Dashboard() {
 
     useEffect(() => {
         if (mapRef.current && parcelas.length > 0) {
+            // Elimina los marcadores existentes
             markersRef.current.forEach((marker) => marker.remove());
             markersRef.current = [];
-
+    
             const bounds = new mapboxgl.LngLatBounds();
-
-            parcelas.forEach((parcela) => {
+    
+            // Filtra las parcelas para eliminar duplicados basados en el id
+            const parcelasUnicas = parcelas.filter(
+                (parcela, index, self) =>
+                    index === self.findIndex((p) => p.id === parcela.id)
+            );
+    
+            parcelasUnicas.forEach((parcela) => {
                 const { latitud, longitud, nombre, responsable, tipo_cultivo, id, sensor } = parcela;
-
+    
                 bounds.extend([longitud, latitud]);
-
+    
                 const popup = new mapboxgl.Popup({
                     offset: 25,
                     anchor: 'left',
-                })
-                    .setHTML(`
-                       <div style="
-            font-size: 14px; 
-            line-height: 1.6; 
-            font-family: Arial, sans-serif; 
-            color: #333; 
-            padding: 10px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); 
-            background-color: #fff;
-        ">
-            <h3 style="margin: 0 0 8px; font-size: 16px; color:rgb(87, 93, 255);">${nombre}</h3>
-            <p style="margin: 0; font-weight: bold;">Responsable:</p>
-            <p style="margin: 0 0 8px;">${responsable}</p>
-            <p style="margin: 0; font-weight: bold;">Cultivo:</p>
-            <p style="margin: 0 0 8px;">${tipo_cultivo}</p>
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0;" />
- <h4 style="margin: 0 0 8px; font-size: 14px; color: #555;">Datos de Sensores:</h4>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li><strong>Temperatura:</strong> ${sensor.temperatura} °C</li>
-                <li><strong>Humedad:</strong> ${sensor.humedad} %</li>
-                <li><strong>Lluvia:</strong> ${sensor.lluvia} mm</li>
-                <li><strong>Sol:</strong> ${sensor.sol} W/m²</li>
-            </ul>
-            <button 
-                class="graf-btn" 
-                data-id="${id}" 
-                style="
-                    margin-top: 10px; 
-                    padding: 8px 12px; 
-                    font-size: 14px; 
-                    color: #fff; 
-                    background-color:rgb(72, 79, 255); 
-                    border: none; 
-                    border-radius: 4px; 
-                    cursor: pointer;
-                "
-            >
-                Ver Histórico
-            </button>
-        </div>
-                    `);
-
+                }).setHTML(`
+                    <div style="
+                        font-size: 14px; 
+                        line-height: 1.6; 
+                        font-family: Arial, sans-serif; 
+                        color: #333; 
+                        padding: 10px; 
+                        border-radius: 8px; 
+                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); 
+                        background-color: #fff;
+                    ">
+                        <h3 style="margin: 0 0 8px; font-size: 16px; color:rgb(87, 93, 255);">${nombre}</h3>
+                        <p style="margin: 0; font-weight: bold;">Responsable:</p>
+                        <p style="margin: 0 0 8px;">${responsable}</p>
+                        <p style="margin: 0; font-weight: bold;">Cultivo:</p>
+                        <p style="margin: 0 0 8px;">${tipo_cultivo}</p>
+                        <hr style="border: none; border-top: 1px solid #ddd; margin: 8px 0;" />
+                        <h4 style="margin: 0 0 8px; font-size: 14px; color: #555;">Datos de Sensores:</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li><strong>Temperatura:</strong> ${sensor.temperatura} °C</li>
+                            <li><strong>Humedad:</strong> ${sensor.humedad} %</li>
+                            <li><strong>Lluvia:</strong> ${sensor.lluvia} mm</li>
+                            <li><strong>Sol:</strong> ${sensor.sol} W/m²</li>
+                        </ul>
+                        <button 
+                            class="graf-btn" 
+                            data-id="${id}" 
+                            style="
+                                margin-top: 10px; 
+                                padding: 8px 12px; 
+                                font-size: 14px; 
+                                color: #fff; 
+                                background-color:rgb(72, 79, 255); 
+                                border: none; 
+                                border-radius: 4px; 
+                                cursor: pointer;
+                            "
+                        >
+                            Ver Histórico
+                        </button>
+                    </div>
+                `);
+    
                 const marker = new mapboxgl.Marker()
                     .setLngLat([longitud, latitud])
                     .setPopup(popup)
                     .addTo(mapRef.current!);
-
+    
                 markersRef.current.push(marker);
-
+    
                 marker.getElement().addEventListener('click', () => {
                     setParcelaSeleccionada(parcela);
                 });
-
+    
                 popup.on('open', () => {
                     const button = document.querySelector(`.graf-btn[data-id="${id}"]`);
                     if (button) {
@@ -196,7 +204,7 @@ function Dashboard() {
                     }
                 });
             });
-
+    
             mapRef.current.fitBounds(bounds, { padding: 50 });
         }
     }, [parcelas]);
@@ -348,11 +356,11 @@ function Dashboard() {
                             </div>
                         </section>
                     </div>
-                    <h2 style={{ marginLeft: '50%', marginTop: '10px' }}>Datos Historicos</h2>
+                    <h2 style={{ marginLeft: '47%', marginTop: '10px' }}>Datos Historicos del terreno</h2>
                             <section className="graficos-section">
                            
                                 <div className="grafico-container">
-                                    <h2>Porcentaje de Humedad</h2>
+                                    <h2>Promedio de Humedad</h2>
                                     {doughnutData ? (
                                         <div className="chart-container" style={{ width: '300px', height: '400px' }}>
                                             <Doughnut data={doughnutData} />

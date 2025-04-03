@@ -212,7 +212,7 @@ function Graficos() {
 
                         <section className="graficos-section">
                             <div className="grafico-container">
-                                <h2>Porcentaje de Humedad</h2>
+                                <h2>Promedio de Humedad</h2>
                                 {doughnutData ? (
                                     <div className="chart-container" style={{ width: '300px', height: '400px' }}>
                                         <Doughnut data={doughnutData} />
