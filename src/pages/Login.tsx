@@ -31,9 +31,12 @@ function Login() {
     
         const data = await res.json();
         if (res.ok) {
-            // Guardar el token en el almacenamiento local
+            // Guardar el token y nombre de usuario en el almacenamiento local
             localStorage.setItem('token', data.token);
-            
+            localStorage.setItem('username', data.user.username);
+            localStorage.setItem('email', data.user.email);
+            //localStorage.setItem('profilePicture', data.user.profile_picture || '');
+            localStorage.setItem('userId', data.user.id_user.toString()); // Guardar el ID del usuario
             // Redirigir al dashboard principal
             Swal.fire({
                 icon: 'success',

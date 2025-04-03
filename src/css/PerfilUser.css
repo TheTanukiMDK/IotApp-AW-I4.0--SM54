@@ -1,0 +1,105 @@
+.profile-user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-left: 250px;
+    box-sizing: border-box;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.foto-contenedor {
+    flex: 1.3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.avatar img {
+    width: 345px;
+    height: 345px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    cursor: pointer;
+}
+
+.avatar .change-picture{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor */
+    margin-top: 10px;
+    cursor: pointer;
+}
+ .save-photo{
+    width: 100%;
+    padding: 10px;
+    background-color: #464cff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.info-contenedor {
+    flex: 2;
+    background-color: rgb(255, 255, 255);
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+}
+
+
+
+.form-update {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 15px;
+}
+
+.form-update .title-update{
+    margin-top: 25px;
+}
+
+.form-update label {
+    font-weight: bold;
+}
+
+.form-update input {
+    background: transparent;
+    border: 2px solid rgba(96, 96, 96, 0.312);
+    border-radius: 13px;
+    font-size: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.form-update button {
+    padding: 10px;
+    background-color: #464cff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 1rem;
+    
+}
+
+.form-update button:hover {
+    background-color: rgb(51, 55, 148);
+}

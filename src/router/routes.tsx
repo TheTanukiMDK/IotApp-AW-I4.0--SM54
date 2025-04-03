@@ -4,6 +4,7 @@ import Graficos from '../pages/Graficos';
 import ParcelasDelete from '../pages/ParcelasDelete'
 import Login from '../pages/Login';
 import Registro from '../pages/Registro';
+import PerfilUser from '../pages/PerfilUser';
 import ProtectedRoute from '../components/ProtectedRouted';
 import PublicRoute from '../components/PublicRoute';
 import NotFound from '../error/NotFound';
@@ -42,6 +43,13 @@ export const rutas = createBrowserRouter([
         element:
             <ProtectedRoute>
                 <Graficos />
+            </ProtectedRoute>
+    },
+    {
+        path: '/perfilUser',
+        element:
+            <ProtectedRoute>
+               <PerfilUser />
             </ProtectedRoute>
     },
     {

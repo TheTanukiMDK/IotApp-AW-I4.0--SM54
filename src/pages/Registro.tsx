@@ -3,6 +3,7 @@ import '../css/Login.css';
 import Swal from 'sweetalert2';
 
 function Register() {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -20,7 +21,7 @@ function Register() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!email || !password || !confirmPassword) {
+        if (!username || !email || !password || !confirmPassword) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Campos vacíos',
@@ -61,7 +62,7 @@ function Register() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({username, email, password }),
         });
 
         const data = await res.json();
@@ -87,6 +88,14 @@ function Register() {
             <div className='wrapper'>
                 <form onSubmit={handleSubmit}>
                     <h1>Registro</h1>
+                    <div className='input-box'>
+                        <input
+                            type='text'
+                            placeholder='Ingresa nombre de usuario'
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)} // Nuevo campo para username
+                        />
+                    </div>
                     <div className='input-box'>
                         <input
                             type='text'
